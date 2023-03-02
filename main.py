@@ -1,64 +1,60 @@
 import os
 from clearwindow import clearWindow
-clearWindow() 
+from funciones import *
+clearWindow()
 
-class Menu:
-    #Esta clase define el estado y el comportamiento del menu
-    
-    def __init__(self):
-        self.header= "\t\t:..Analizar Rimas..:\n"
-        self.opcion = None
-
-    def selector(self):
-        if self.opcion == None:
-            self.menuPrincipal()
-        elif self.opcion == 1:
-            self.listaArchivos()
-        elif self.opcion == 0:
-            print("Ctrl + C")            
-            
-        try:
-            self.opcion = int(input("\nIngrese una Opcion: "))
-        except ValueError:
-            print("Ops... Ingrese una opcion valida (Base 10)")
-
-    def menuPrincipal(self):
-        """
-        Menu Principal
-        """
-        clearWindow() 
-        print(self.header)
-        print("1: Listar canciones")
-        print("0: Salir")
-    
-    def listaArchivos(self):
-
-        self.direccionArchivo = ""
-        clearWindow() #limpia la pantalla
-        print(self.header) # imprime un header global
-        
-        
-        ls = os.listdir("letras/") # enlista archivos dentro de una lista
-        indice = 0 # enumera los archivos para el menu / sirve como index para seleccionar dentro de la lista
-        for archivo in ls:
-            indice += 1
-            print(f"{indice}: {archivo}")
-        print("\n0: <- Retroceder")
-        print(f"indice: {indice}")
-        while True:
-            try:
-                self.opcion = int(input("\nIngrese una Opcion: "))
-                if self.opcion > 0 and self.opcion <= indice:
-                    self.direccionArchivo = f"letras/{ls[self.opcion-1]}"
-                elif self.opcion == 0:
-                    self.menuPrincipal()
-            except ValueError:
-                print("Ops... Ingrese una opcion valida (Base 10)")
- 
-
-menu = Menu()
+def mostrar_menu(opciones):
+    print('Seleccione una opción:')
+    for clave in sorted(opciones):
+        print(f' {clave}) {opciones[clave][0]}')
 
 
+def leer_opcion(opciones):
+    while (a := input('Opción: ')) not in opciones:
+        print('Opción incorrecta, vuelva a intentarlo.')
+    return a
 
-while True:
-    menu.selector()
+
+def ejecutar_opcion(opcion, opciones):
+    opciones[opcion][1]()
+
+
+def generar_menu(opciones, opcion_salida):
+    opcion = None
+    while opcion != opcion_salida:
+        mostrar_menu(opciones)
+        opcion = leer_opcion(opciones)
+        ejecutar_opcion(opcion, opciones)
+        print()
+
+
+def menu_principal():
+    opciones = {
+        '1': ('Opción 1', accion1),
+        '2': ('Opción 2', accion2),
+        '3': ('Opción 3', accion3),
+        '4': ('Salir', salir)
+    }
+
+    generar_menu(opciones, '4')
+
+
+def accion1():
+    clearWindow()
+    print(f"\t\t:..Texto Modificado..:\n{versosTextoPlano}")
+
+
+def accion2():
+    print('Has elegido la opción 2')
+
+
+def accion3():
+    print('Has elegido la opción 3')
+
+
+def salir():
+    print('Saliendo')
+
+
+if __name__ == '__main__':
+    menu_principal()
