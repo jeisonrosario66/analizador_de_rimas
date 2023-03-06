@@ -4,6 +4,7 @@ from funciones import *
 clearWindow()
 
 def mostrar_menu(opciones):
+    print("\t\t:..Analizar Rimas..:\n")
     print('Seleccione una opción:')
     for clave in sorted(opciones):
         print(f' {clave}) {opciones[clave][0]}')
@@ -30,13 +31,14 @@ def generar_menu(opciones, opcion_salida):
 
 def menu_principal():
     opciones = {
-        '1': ('Opción 1', accion1),
+        '1': ('Mostrar letra (No dinamico)', accion1),
         '2': ('Opción 2', accion2),
         '3': ('Opción 3', accion3),
-        '4': ('Salir', salir)
+        '4': ('Limpiar pantalla', clear),
+        '5': ('Salir', salir)
     }
 
-    generar_menu(opciones, '4')
+    generar_menu(opciones, '5')
 
 
 def accion1():
@@ -54,6 +56,9 @@ def accion3():
 
 def salir():
     print('Saliendo')
+
+def clear():
+    clearWindow()
 
 
 if __name__ == '__main__':
