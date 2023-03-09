@@ -5,7 +5,7 @@ init()
 clearWindow()
 
 #entrada
-archivo = "Bastión de lágrimas.txt"
+archivo = "instrocpecion.txt"
 
 #salida
 diccionario = {} 
@@ -143,22 +143,86 @@ def rimador(num):
     
     estrofa += verso1+verso2+verso3+verso4
 
-    # Comprueba si sexiste
+    # Logica de rimas
+    # Verso 1 - Verso 2
+    # si tiene 3 vocales o mas y todas riman
+    if len(vocales1) >= 3 and len(vocales2) >= 3 and vocales1[-1] == vocales2[-1] and vocales1[-2] == vocales2[-2] and vocales1[-3] == vocales2[-3]:
+        estrofa = estrofa.replace(f"{selector1}",f"{Back.RED + Style.BRIGHT + Fore.WHITE}{selector1}{Style.RESET_ALL}")
+        estrofa = estrofa.replace(f"{selector2}",f"{Back.RED + Style.BRIGHT + Fore.WHITE}{selector2}{Style.RESET_ALL}")
+    # si tiene 2 vocales o mas y todas riman
+    elif len(vocales1) >= 2 and len(vocales2) >= 2 and vocales1[-1] == vocales2[-1] and vocales1[-2] == vocales2[-2]: 
+        estrofa = estrofa.replace(f"{selector1}",f"{Back.RED + Style.NORMAL + Fore.WHITE}{selector1}{Style.RESET_ALL}")
+        estrofa = estrofa.replace(f"{selector2}",f"{Back.RED + Style.NORMAL + Fore.WHITE}{selector2}{Style.RESET_ALL}")
+    # Rima solo 1 vocal
+    elif len(vocales1) >= 1 and len(vocales2) >= 1 and vocales1[-1] == vocales2[-1]: 
+        estrofa = estrofa.replace(f"{selector1}",f"{Back.RED + Fore.WHITE}{selector1}{Style.RESET_ALL}")
+        estrofa = estrofa.replace(f"{selector2}",f"{Back.RED + Fore.WHITE}{selector2}{Style.RESET_ALL}")
+    else: # Si no riman Comprueba otro verso
+        if len(vocales2) >= 3 and len(vocales4) >= 3 and vocales2[-1] == vocales4[-1] and vocales2[-2] == vocales4[-2] and vocales2[-3] == vocales4[-3]:
+            estrofa = estrofa.replace(f"{selector2}",f"{Back.RED + Style.BRIGHT + Fore.GREEN}{selector2}{Style.RESET_ALL}")
+            estrofa = estrofa.replace(f"{selector4}",f"{Back.RED + Style.BRIGHT + Fore.GREEN}{selector4}{Style.RESET_ALL}")
+            # si tiene 2 vocales o mas y todas riman
+        elif len(vocales2) >= 2 and len(vocales4) >= 2 and vocales2[-1] == vocales4[-1] and vocales2[-2] == vocales4[-2]: 
+            estrofa = estrofa.replace(f"{selector2}",f"{Back.RED + Style.NORMAL + Fore.GREEN}{selector2}{Style.RESET_ALL}")
+            estrofa = estrofa.replace(f"{selector4}",f"{Back.RED + Style.NORMAL + Fore.GREEN}{selector4}{Style.RESET_ALL}")
+        # Rima solo 1 vocal
+        elif len(vocales2) >= 1 and len(vocales4) >= 1 and vocales2[-1] == vocales4[-1]: 
+            estrofa = estrofa.replace(f"{selector2}",f"{Back.RED + Fore.GREEN}{selector2}{Style.RESET_ALL}")
+            estrofa = estrofa.replace(f"{selector4}",f"{Back.RED + Fore.GREEN}{selector4}{Style.RESET_ALL}")
     
-    if vocales1[-1] == vocales2[-1]:
-        estrofa = estrofa.replace(f"{selector1}",f"{Fore.RED}{selector1}{Style.RESET_ALL}")
-        estrofa = estrofa.replace(f"{selector2}",f"{Fore.RED}{selector2}{Style.RESET_ALL}")
-    if vocales1[-1] == vocales3[-1]:
-        estrofa = estrofa.replace(f"{selector3}",f"{Fore.RED}{selector3}{Style.RESET_ALL}")
-    if vocales1[-1] == vocales4[-1]:
-        estrofa = estrofa.replace(f"{selector4}",f"{Fore.RED}{selector4}{Style.RESET_ALL}")
+    # Verso 1 - Verso 3
+    # si tiene 3 vocales o mas y todas riman
+    if len(vocales1) >= 3 and len(vocales3) >= 3 and vocales1[-1] == vocales3[-1] and vocales1[-2] == vocales3[-2] and vocales1[-3] == vocales3[-3]:
+        estrofa = estrofa.replace(f"{selector1}",f"{Back.RED + Style.BRIGHT + Fore.WHITE}{selector1}{Style.RESET_ALL}")
+        estrofa = estrofa.replace(f"{selector3}",f"{Back.RED + Style.BRIGHT + Fore.WHITE}{selector3}{Style.RESET_ALL}")
+    # si tiene 2 vocales o mas y todas riman
+    elif len(vocales1) >= 2 and len(vocales3) >= 2 and vocales1[-1] == vocales3[-1] and vocales1[-2] == vocales3[-2]: 
+        estrofa = estrofa.replace(f"{selector1}",f"{Back.RED + Style.NORMAL + Fore.WHITE}{selector1}{Style.RESET_ALL}")
+        estrofa = estrofa.replace(f"{selector3}",f"{Back.RED + Style.NORMAL + Fore.WHITE}{selector3}{Style.RESET_ALL}")
+    # Rima solo 1 vocal
+    elif len(vocales1) >= 1 and len(vocales3) >= 1 and vocales1[-1] == vocales3[-1]: 
+        estrofa = estrofa.replace(f"{selector1}",f"{Back.RED + Style.DIM + Fore.WHITE}{selector1}{Style.RESET_ALL}")
+        estrofa = estrofa.replace(f"{selector3}",f"{Back.RED + Style.DIM + Fore.WHITE}{selector3}{Style.RESET_ALL}")
+    else: # Si no riman comprueba otro verso
+        if len(vocales3) >= 3 and len(vocales4) >= 3 and vocales3[-1] == vocales4[-1] and vocales3[-2] == vocales4[-2] and vocales3[-3] == vocales4[-3]:
+            estrofa = estrofa.replace(f"{selector3}",f"{Back.RED + Style.BRIGHT + Fore.GREEN}{selector3}{Style.RESET_ALL}")
+            estrofa = estrofa.replace(f"{selector4}",f"{Back.RED + Style.BRIGHT + Fore.GREEN}{selector4}{Style.RESET_ALL}")
+        # si tiene 2 vocales o mas y todas riman
+        elif len(vocales3) >= 2 and len(vocales4) >= 2 and vocales3[-1] == vocales4[-1] and vocales3[-2] == vocales4[-2]: 
+            estrofa = estrofa.replace(f"{selector3}",f"{Back.RED + Style.NORMAL + Fore.GREEN}{selector3}{Style.RESET_ALL}")
+            estrofa = estrofa.replace(f"{selector4}",f"{Back.RED + Style.NORMAL + Fore.GREEN}{selector4}{Style.RESET_ALL}")
+        # Rima solo 1 vocal
+        elif len(vocales3) >= 1 and len(vocales4) >= 1 and vocales3[-1] == vocales4[-1]: 
+            estrofa = estrofa.replace(f"{selector3}",f"{Back.RED + Style.DIM + Fore.GREEN}{selector3}{Style.RESET_ALL}")
+            estrofa = estrofa.replace(f"{selector4}",f"{Back.RED + Style.DIM + Fore.GREEN}{selector4}{Style.RESET_ALL}")
+        
+    # Verso 1 - Verso 4
+    # si tiene 3 vocales o mas y todas riman
+    if len(vocales1) >= 3 and len(vocales4) >= 3 and vocales1[-1] == vocales4[-1] and vocales1[-2] == vocales4[-2] and vocales1[-3] == vocales4[-3]:
+        estrofa = estrofa.replace(f"{selector1}",f"{Back.RED + Style.BRIGHT + Fore.WHITE}{selector1}{Style.RESET_ALL}")
+        estrofa = estrofa.replace(f"{selector4}",f"{Back.RED + Style.BRIGHT + Fore.WHITE}{selector4}{Style.RESET_ALL}")
+    # si tiene 2 vocales o mas y todas riman
+    elif len(vocales1) >= 2 and len(vocales4) >= 2 and vocales1[-1] == vocales4[-1] and vocales1[-2] == vocales4[-2]: 
+        estrofa = estrofa.replace(f"{selector1}",f"{Back.RED + Style.NORMAL + Fore.WHITE}{selector1}{Style.RESET_ALL}")
+        estrofa = estrofa.replace(f"{selector4}",f"{Back.RED + Style.NORMAL + Fore.WHITE}{selector4}{Style.RESET_ALL}")
+    # Rima solo 1 vocal
+    elif len(vocales1) >= 1 and len(vocales4) >= 1 and vocales1[-1] == vocales4[-1]: 
+        estrofa = estrofa.replace(f"{selector1}",f"{Back.RED + Style.DIM + Fore.WHITE}{selector1}{Style.RESET_ALL}")
+        estrofa = estrofa.replace(f"{selector4}",f"{Back.RED + Style.DIM + Fore.WHITE}{selector4}{Style.RESET_ALL}")
+    
+                
+   
 
     versosTextoPlano += estrofa+"\n"
-    
+
 for i in range(len(versosFormateados)):
     diccionarioCreate(i)
     rimador(i)
     diccionario.clear()
-    
+""" 
 
+diccionarioCreate(7)
+rimador(7)   
+
+"""
 print(versosTextoPlano)
