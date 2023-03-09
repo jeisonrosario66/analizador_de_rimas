@@ -1,5 +1,6 @@
 from clearwindow import clearWindow
 from colorama import init, Fore, Back, Style
+import unidecode
 init()
 clearWindow()
 
@@ -7,7 +8,8 @@ clearWindow()
 archivo = "Bastión de lágrimas.txt"
 
 #salida
-diccionario = {}
+diccionario = {} 
+versosTextoPlano = ""
 
 def reader(archivo):
     """
@@ -18,10 +20,8 @@ def reader(archivo):
     Returns:
         return: type(tuple)
         versosLista: type(list) versos sin agrupar // sin formato
-        versosTextoPlano: type(str) versos en texto plato para modificacion final
     """    
     versosLista = [] 
-    versosTexto = ""
     versosFormateadosTemp = []
     
     with open(f'letras/{archivo}', 'r',
@@ -29,7 +29,8 @@ def reader(archivo):
         temp = fichero.readlines()
         for linea in temp:
             linea = linea.lower()
-            versosTexto += linea
+            # Elimina las tildes
+            linea = unidecode.unidecode(linea)
             versosLista.append(linea.split())
     
     num_min = 0
@@ -39,10 +40,9 @@ def reader(archivo):
         num_min = num_max + 1
         num_max += 5
     
-    return versosFormateadosTemp, versosTexto
+    return versosFormateadosTemp
     
-#
-versosFormateados, versosTextoPlano  = reader(archivo)
+versosFormateados = reader(archivo)
 
 def diccionarioCreate(num):
     """
@@ -73,17 +73,37 @@ def diccionarioCreate(num):
                 listVocalTemp += letra
             diccionario[ultimaPalabra] = listVocalTemp
 
-def iterador(num):
-    global versosTextoPlano
+def rimador(num):
     """
+    Esta funcion se encarga de dar el ultimo formado y de rimar(colorear) los veros
+
+    Args:
+        num (INT): Indica el numero del parrafo sobre el cual trabaja la funcion
+
+    Returns:
+        versosTextoPlano: Salida final, parrafos estructurados y rimados
+    """
+    global versosTextoPlano
+    estrofa = ""    
+
+    """
+    # Imprime el diccionario
     for key, value in diccionario.items():
         print(f"{key} -> {value}")
     """
-    #ultima palabra(-1) del verso 1(0)
-    #selector / limpia el dato de alguna impureza y lo almacena
+    # ultima palabra(-1) del verso 1(0)
+    # selectorVerso / selecciona el verso completo
+    # selector / limpia el dato y lo almacena
+    selectorVerso1 = versosFormateados[num][0]
     selector1 = versosFormateados[num][0][-1].replace('"','')
+    
+    selectorVerso2 = versosFormateados[num][1]
     selector2 = versosFormateados[num][1][-1].replace('"','')
+    
+    selectorVerso3 = versosFormateados[num][2]
     selector3 = versosFormateados[num][2][-1].replace('"','')
+    
+    selectorVerso4 = versosFormateados[num][3]
     selector4 = versosFormateados[num][3][-1].replace('"','')
     
     #Buscar el selector dentro del diccionario
@@ -91,18 +111,54 @@ def iterador(num):
     vocales2 = diccionario.get(selector2)
     vocales3 = diccionario.get(selector3)
     vocales4 = diccionario.get(selector4)
+    
+    def ejemploFuncion(parametro):
+        """
+        Recorre un verso(lista) y lo convierte a str con las modificaciones de color
+
+        Args:
+            parametro (list): indica el verso exacto el cual sera recorrido
+
+        Returns:
+            versosTemp (str): verso individual para posterior union en una sola estrofa 4x4
+        """
+        global versosTextoPlano
+        contadorVerso=0
+        versosTemp = ""
+        
+        for i in parametro:
+            contadorVerso+=1
+            i = i.replace('"','')
+            if contadorVerso != len(parametro):
+                versosTemp += i+" "
+            elif contadorVerso == len(parametro):
+                versosTemp += f"{i}\n"
+                contadorVerso=0
+        return versosTemp
+        
+    verso1=ejemploFuncion(selectorVerso1)
+    verso2=ejemploFuncion(selectorVerso2)
+    verso3=ejemploFuncion(selectorVerso3)
+    verso4=ejemploFuncion(selectorVerso4)
+    
+    estrofa += verso1+verso2+verso3+verso4
 
     # Comprueba si sexiste
+    
     if vocales1[-1] == vocales2[-1]:
-        versosTextoPlano = versosTextoPlano.replace(f"{selector1}",f"{Fore.RED}{selector1}{Style.RESET_ALL}")
-        versosTextoPlano = versosTextoPlano.replace(f"{selector2}",f"{Fore.RED}{selector2}{Style.RESET_ALL}")
+        estrofa = estrofa.replace(f"{selector1}",f"{Fore.RED}{selector1}{Style.RESET_ALL}")
+        estrofa = estrofa.replace(f"{selector2}",f"{Fore.RED}{selector2}{Style.RESET_ALL}")
     if vocales1[-1] == vocales3[-1]:
-        versosTextoPlano = versosTextoPlano.replace(f"{selector3}",f"{Fore.RED}{selector3}{Style.RESET_ALL}")
+        estrofa = estrofa.replace(f"{selector3}",f"{Fore.RED}{selector3}{Style.RESET_ALL}")
     if vocales1[-1] == vocales4[-1]:
-        versosTextoPlano = versosTextoPlano.replace(f"{selector4}",f"{Fore.RED}{selector4}{Style.RESET_ALL}")
-              
+        estrofa = estrofa.replace(f"{selector4}",f"{Fore.RED}{selector4}{Style.RESET_ALL}")
+
+    versosTextoPlano += estrofa+"\n"
+    
 for i in range(len(versosFormateados)):
     diccionarioCreate(i)
-    iterador(i)
+    rimador(i)
+    diccionario.clear()
+    
 
-#print(f"\t\t:..Texto Modificado..:\n{versosTextoPlano}")
+print(versosTextoPlano)
