@@ -1,0 +1,8 @@
+Requisitos Ciclo 2
+
+1. Clona el repositorio https://github.com/ageron/handson-ml
+2. Crea una rama
+3. Actualiza archivo requirementes.txt
+4. Crea PR
+5. Aprueba el PR desde GitHub
+6. Añade especificaciones
