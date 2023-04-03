@@ -1,0 +1,13 @@
+Requisitos Ciclo 3
+
+1 Crea una rama "A" desde "Master"
+2 Crea un archivo docs.txt
+3 Crea PR (sin aceptarlo)
+4 Crea una rama "B" desde "Master"
+5 Crea un archivo docs.txt diferente al de la rama "A"
+6 Crea PR (sin aceptarlo)
+7 Resuelve conflictos
+8 Revierte cambios creados empleando comandos de Git
+9 Aprueba PR desde GitHub
+10 PR aceptado y ramas creadas
+11 Serie de PRs en Git
