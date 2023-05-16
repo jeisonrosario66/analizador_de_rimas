@@ -5,18 +5,20 @@ init()
 clearWindow()
 
 #entrada
-archivo = "instrocpecion.txt"
-versosTextoPlano = ""
+archivo = "solitario-siglo.txt"
 
-def func(archivo):
-        #salida
-    diccionario = {} 
-
-    def reader(archivo):
+class Func:
+    def __init__(self,archivo):
+        self.diccionario = {}
+        self.archivo = archivo 
+        self.versosFormateados = self.reader() # = Estruptura 4x4
+        self.versosTextoPlano = ""
+        
+    def reader(self):
         """
-        Recorre la informacion de un archivo linea por linea
-        almacena en formato list
-        Se espera la informacion este correctamente formateada
+        - Se espera la informacion de entrada este correctamente formateada
+        - Recorre la informacion de un archivo linea por linea
+        - almacena en formato list
         
         Returns:
             return: type(tuple)
@@ -25,7 +27,9 @@ def func(archivo):
         versosLista = [] 
         versosFormateadosTemp = []
         
-        with open(f'letras/{archivo}', 'r',
+        # Habre "archivo" y lo lee linea por linea alcenandolo en "versosLista"
+        # versosLista=["","","","","","","","","","","","","","","",""]
+        with open(f'letras/{self.archivo}', 'r',
                 encoding="utf-8") as fichero:
             temp = fichero.readlines()
             for linea in temp:
@@ -34,6 +38,8 @@ def func(archivo):
                 linea = unidecode.unidecode(linea)
                 versosLista.append(linea.split())
         
+        # Recorre "versosLista" los almacena en "versosFormateadosTemp" de 4 en 4, generando la estruptura del RAP
+        # versosFormateadosTemp=[["","","",""],["","","",""],["","","",""],["","","",""]] = Estruptura 4x4
         num_min = 0
         num_max = 4
         while num_max <= len(versosLista):
@@ -41,21 +47,19 @@ def func(archivo):
             num_min = num_max + 1
             num_max += 5
         
-        return versosFormateadosTemp
-        
-    versosFormateados = reader(archivo)
+        return versosFormateadosTemp # = Estruptura 4x4    
 
-    def diccionarioCreate(num):
+    def diccionarioCreate(self, num):
         """
-        recorre la estructura 4x4 
-        se detiene en la ultima palabra de cada verso
-        la recorre y la almacera en diccionario
-        {"palabra":["vocales"]}
-        {"hola":["o","a"]}
+        - recorre la estructura 4x4, parrafo por parrafo
+        - se detiene en la ultima palabra de cada verso
+        - la recorre y la almacera en diccionario
+        - {"palabra":["vocales"]}
+        - {"hola":["o","a"]}
         Args:
-            num (INT): numero que recorre los versos 4x4
+            num (INT): numero que recorre los versos 4x4, dicho argumento debe ser iterado segun la cantidad de versos
         """
-        temp=versosFormateados[num]
+        temp=self.versosFormateados[num]
         for ultimaPalabra in  temp:
             #ultima palabra de cada verso
             ultimaPalabra = ultimaPalabra[-1].replace('"','')
@@ -72,11 +76,43 @@ def func(archivo):
                     listVocalTemp += letra
                 elif "u" == letra or "ú" == letra:
                     listVocalTemp += letra
-                diccionario[ultimaPalabra] = listVocalTemp
+                self.diccionario[ultimaPalabra] = listVocalTemp
 
-    def rimador(num):
+    def rimador_complemento(self, linea):
+            """
+            - Esta funcion solo tiene sentido llamada desde el metodo "rimador"
+            - Recorre un verso(lista) y lo convierte a str
+
+            Args:
+                linea (list): indica el verso exacto el cual sera recorrido
+
+            Returns:
+                versosTemp (str): verso individual(1/4)  para posterior union en una sola estrofa(4/4)
+            """
+            contadorVerso=0
+            parrafoTemp = ""
+            
+            """ 
+            - linea = =["pal","pal","pal","pal","pal","pal","pal","pal"]
+            - recorre palabra por palabra en "linea"
+            - por cada iteracion = "contadorVerso += 1" (Cuenta cuantas palabras a recorrido)
+            - if(Si la cantidad de palabras recorridas es diferente a la cantidad de palabras total en "linea")
+            {entoncces agrega esa palabra a "parrafoTemp" mas un espacio en blanco} 
+            else{De lo contrario agrega la palabra a "parrafoTemp" y agrega un salto de linea}
+            """
+            for palabra in linea:
+                contadorVerso+=1
+                palabra = palabra.replace('"','')
+                if contadorVerso != len(linea):
+                    parrafoTemp += palabra+" "
+                elif contadorVerso == len(linea):
+                    parrafoTemp += f"{palabra}\n"
+                    contadorVerso=0
+            return parrafoTemp
+
+    def rimador(self, num):
         """
-        Esta funcion se encarga de dar el ultimo formado y de rimar(colorear) los veros
+        - Esta funcion se encarga de dar el ultimo formado y de identificar la rimar y colorear los versos
 
         Args:
             num (INT): Indica el numero del parrafo sobre el cual trabaja la funcion
@@ -84,63 +120,34 @@ def func(archivo):
         Returns:
             versosTextoPlano: Salida final, parrafos estructurados y rimados
         """
-        global versosTextoPlano
+        
         estrofa = ""    
 
-        """
-        # Imprime el diccionario
-        for key, value in diccionario.items():
-            print(f"{key} -> {value}")
-        """
-        # ultima palabra(-1) del verso 1(0)
+        # ultima palabra[-1] del verso 1[0]
         # selectorVerso / selecciona el verso completo
         # selector / limpia el dato y lo almacena
-        selectorVerso1 = versosFormateados[num][0]
-        selector1 = versosFormateados[num][0][-1].replace('"','')
+        selectorVerso1 = self.versosFormateados[num][0]
+        selector1 = self.versosFormateados[num][0][-1].replace('"','')
         
-        selectorVerso2 = versosFormateados[num][1]
-        selector2 = versosFormateados[num][1][-1].replace('"','')
+        selectorVerso2 = self.versosFormateados[num][1]
+        selector2 = self.versosFormateados[num][1][-1].replace('"','')
         
-        selectorVerso3 = versosFormateados[num][2]
-        selector3 = versosFormateados[num][2][-1].replace('"','')
+        selectorVerso3 = self.versosFormateados[num][2]
+        selector3 = self.versosFormateados[num][2][-1].replace('"','')
         
-        selectorVerso4 = versosFormateados[num][3]
-        selector4 = versosFormateados[num][3][-1].replace('"','')
+        selectorVerso4 = self.versosFormateados[num][3]
+        selector4 = self.versosFormateados[num][3][-1].replace('"','')
         
         #Buscar el selector dentro del diccionario
-        vocales1 = diccionario.get(selector1)
-        vocales2 = diccionario.get(selector2)
-        vocales3 = diccionario.get(selector3)
-        vocales4 = diccionario.get(selector4)
-        
-        def ejemploFuncion(parametro):
-            """
-            Recorre un verso(lista) y lo convierte a str con las modificaciones de color
-
-            Args:
-                parametro (list): indica el verso exacto el cual sera recorrido
-
-            Returns:
-                versosTemp (str): verso individual para posterior union en una sola estrofa 4x4
-            """
-            global versosTextoPlano
-            contadorVerso=0
-            versosTemp = ""
+        vocales1 = self.diccionario.get(selector1)
+        vocales2 = self.diccionario.get(selector2)
+        vocales3 = self.diccionario.get(selector3)
+        vocales4 = self.diccionario.get(selector4)
             
-            for i in parametro:
-                contadorVerso+=1
-                i = i.replace('"','')
-                if contadorVerso != len(parametro):
-                    versosTemp += i+" "
-                elif contadorVerso == len(parametro):
-                    versosTemp += f"{i}\n"
-                    contadorVerso=0
-            return versosTemp
-            
-        verso1=ejemploFuncion(selectorVerso1)
-        verso2=ejemploFuncion(selectorVerso2)
-        verso3=ejemploFuncion(selectorVerso3)
-        verso4=ejemploFuncion(selectorVerso4)
+        verso1=self.rimador_complemento(selectorVerso1)
+        verso2=self.rimador_complemento(selectorVerso2)
+        verso3=self.rimador_complemento(selectorVerso3)
+        verso4=self.rimador_complemento(selectorVerso4)
         
         estrofa += verso1+verso2+verso3+verso4
 
@@ -210,17 +217,16 @@ def func(archivo):
         elif len(vocales1) >= 1 and len(vocales4) >= 1 and vocales1[-1] == vocales4[-1]: 
             estrofa = estrofa.replace(f"{selector1}",f"{Back.RED + Style.DIM + Fore.WHITE}{selector1}{Style.RESET_ALL}")
             estrofa = estrofa.replace(f"{selector4}",f"{Back.RED + Style.DIM + Fore.WHITE}{selector4}{Style.RESET_ALL}")
-        
-                    
     
+        self.versosTextoPlano += estrofa+"\n"
 
-        versosTextoPlano += estrofa+"\n"
-
-    for i in range(len(versosFormateados)):
-        diccionarioCreate(i)
-        rimador(i)
-        diccionario.clear()
+    def run(self):
+        for i in range(len(self.versosFormateados)):
+            self.diccionarioCreate(i)
+            self.rimador(i)
+            self.diccionario.clear()
+            
+        print(self.versosTextoPlano)
         
-    print(versosTextoPlano)
-    
-func(archivo)
+obj = Func(archivo)
+obj.run()
